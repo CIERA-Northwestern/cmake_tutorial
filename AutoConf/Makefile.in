@@ -1,0 +1,12 @@
+CC=@CC@
+LD=@CC@
+CFLAGS=@CFLAGS@
+LDFLAGS=@LDFLAGS@
+LIBS=@LIBS@
+
+example: example.o
+	$(LD) -o $@ $^ $(LDFLAGS) $(LIBS)
+
+.PHONY: clean
+clean:
+	rm -f example *.o

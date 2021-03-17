@@ -1,13 +1,30 @@
-# Set Up Environment
+# QUEST
 
-## MacOS
+# Makefile
+
+# Autoconf
+```
+module purge all
+module load mpi/openmpi-4.0.5-intel-19.0.5.281
+module load hdf5/1.10.7-openmpi-4.0.5-intel-19.0.5.281
+module load gsl/2.5-intel-19.0.5.281
+
+autoconf && LDFLAGS=$(echo $LD_LIBRARY_PATH | echo "-L" $(sed 's/:/ -L /g')) ./configure && make
+```
+
+# cmake
+To compile the example using cmake on QUEST. Please run the following commands from within the cmake folder
 
 ```
-conda create --name cmake-tutorial -c conda-forge cmake hdf5 clang_osx-64 --yes
-```
+module purge all
+module load cmake/3.15.4 
+module load mpi/openmpi-4.0.5-intel-19.0.5.281 
+module load hdf5/1.10.7-openmpi-4.0.5-intel-19.0.5.281 
+module load gsl/2.5-intel-19.0.5.281
 
-## Linux
-
-```
-conda create --name cmake-tutorial -c conda-forge cmake hdf5 gcc_linux-64 --yes
+rm -rf build
+mkdir build
+cd build
+CC=mpicc cmake .. -DCMAKE_INSTALL_PREFIX=.
+make install
 ```

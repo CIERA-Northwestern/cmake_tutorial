@@ -1,12 +1,11 @@
 #include <mpi.h>
-#include <fftw3.h>
 #include "hdf5.h"
 #include "hdf5_hl.h"
-#include <cblas.h>
 #include <stdio.h>
 #include <sys/time.h>
 #include <stdlib.h>
 #include <math.h>
+#include <gsl/gsl_sf_bessel.h>
 
 /*-------------------------------------------------------------------------
  * Table API example
@@ -20,19 +19,6 @@
 #define NFIELDS  (hsize_t)  5
 #define NRECORDS (hsize_t)  8
 #define TABLE_NAME "table"
-
-void init_matrix(double* A, int dim1 , int dim2 ) 
-{
-  int mod = 100003, prod = 7 , e = 1 , i = 0, j = 0;
-  for ( i = 0; i < dim1; ++i )
-  {
-	for ( j = 0; j < dim2; ++j )
-        {
-            e = (e*prod + 1)%mod; // random
-            A[i*dim2 + j] = e * .91739210437;
-        }
-  }
-}
 
 int main(int argc, char** argv) {
     // Initialize the MPI environment
@@ -55,33 +41,10 @@ int main(int argc, char** argv) {
     printf("Hello world from processor %s, rank %d out of %d processors\n",
            processor_name, world_rank, world_size);
 
-// FFTW is a little bit of a pain
-    int N;
-    N = 5;
-    fftw_complex *in, *out;
-    fftw_plan my_plan;
-    in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex)*N);
-    out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex)*N);
-    my_plan = fftw_plan_dft_1d(N, in, out, FFTW_FORWARD, FFTW_ESTIMATE);
-    fftw_execute(my_plan);
-    fftw_destroy_plan(my_plan);
-    fftw_free(in);
-    fftw_free(out);
-
-
-// Do some cblas matrix multiplication
-  int m , n , k , j , u , nrep = 1 , cnt = 0;
-  double *A , *B , *C;
-  m = 100;
-  k = 100;
-  n = 100;
-  A = (double *) malloc( sizeof(double) * m * k );
-  B = (double *) malloc( sizeof(double) * k * n );
-  C = (double *) malloc( sizeof(double) * m * n );
-  init_matrix ( A , m , k );
-  init_matrix ( B , k , n );
-  cblas_dgemm ( CblasRowMajor, CblasNoTrans, CblasNoTrans ,
-         m , n , k , 1.0 , A , k , B , n , 0.0 , C , n );
+// run a GSL function
+    double x = 5.0;
+    double y = gsl_sf_bessel_J0 (x);
+    printf ("J0(%g) = %.18e\n", x, y);
 
 // Write an HDF5 Table
     typedef struct Particle
