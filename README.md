@@ -44,7 +44,7 @@ make install
 ```
 
 # Singularity
-Instructions for buiulding the singularity image from the definition file
+Instructions for building the example program into a singularity container using the provided recipe/defintion file.
 
 ```
 module purge all
@@ -53,7 +53,7 @@ cd Singularity
 singularity build --remote example.simg example.def
 ```
 Singularity requires calling programs that were compiled with MPI within the container with an MPI executable that exists on the machine
-that you are running on that has the same *major* release version as the MPI within the container. When we installed OpenMPI in the manner that we did, we installed 4.0.3. On Quest, and we have OpenMPI 4.0.5 installed on Quest as modules. To this end, we show how you can call the program in the container when running on Quest.
+that you are running on that has the same *major* release version as the MPI within the container. When we installed OpenMPI in the manner that we did, we installed version 4.0.3. On Quest, and we have OpenMPI 4.0.5 installed on Quest as modules. To this end, we show how you can call the program in the container when running on Quest.
 
 ## SLURM Example
 ```
