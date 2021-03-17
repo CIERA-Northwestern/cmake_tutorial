@@ -1,0 +1,19 @@
+Bootstrap: docker
+From: ubuntu:groovy-20210225
+
+%post
+    # Upgrade system libraries for ubuntu 20.10 and install libraries we need for our program
+    apt-get -y update && apt-get -y install libopenmpi-dev openmpi-bin libhdf5-serial-dev libgsl-dev libgslcblas0 cmake git
+    # Clone source code
+    git clone https://github.com/CIERA-Northwestern/cmake_tutorial.git /cmake_tutorial
+    cd /cmake_tutorial
+    # checkout branch of code
+    git checkout enhanced_tutorial
+    # run cmake commands
+    cd cmake
+    mkdir -p build
+    cd build
+    CC=mpicc cmake .. -DCMAKE_INSTALL_PREFIX=/opt/local/
+    make install
+%runscript
+    /opt/local/bin/example
