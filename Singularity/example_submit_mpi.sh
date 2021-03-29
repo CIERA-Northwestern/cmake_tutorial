@@ -12,4 +12,4 @@ module purge all
 module load mpi/openmpi-4.0.5-gcc-10.2.0 
 module load singularity
 
-mpirun -np ${SLURM_NTASKS} singularity exec -B /projects:/projects example.simg /opt/local/bin/bin/make_hdf5_table
+mpirun -np ${SLURM_NTASKS} singularity exec -B /projects:/projects example.simg /opt/local/bin/example
